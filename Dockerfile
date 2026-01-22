@@ -6,7 +6,7 @@ WORKDIR /app
 RUN apk add --no-cache git
 
 # Clone your repository
-RUN git clone https://github.com/<USERNAME>/<REPO>.git .
+RUN git clone https://github.com/wigiwee/portfolio-site.git .
 
 # Install dependencies
 RUN npm ci
