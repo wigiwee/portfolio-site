@@ -2,13 +2,19 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+# Install git
+RUN apk add --no-cache git
+
+# Clone your repository
+RUN git clone https://github.com/<USERNAME>/<REPO>.git .
+
+# Install dependencies
 RUN npm ci
 
-COPY . .
+# Build the Vite app
 RUN npm run build
 
-# Install a tiny static file server
+# Install minimal static server
 RUN npm install -g serve
 
 EXPOSE 3000
