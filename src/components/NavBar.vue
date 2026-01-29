@@ -129,7 +129,6 @@ const closeMobileMenu = () => {
             href="https://uptime.wigiwee.com/status/selfhosted"  
             class="nav-link" 
             target="_blank"
-            :class="{ 'active': activeSection === 'connect' }"
           >check uptime</a>
         </div>
 

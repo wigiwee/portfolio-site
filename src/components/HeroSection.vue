@@ -27,7 +27,7 @@ import { Download, ArrowUpRight, ArrowDown } from 'lucide-vue-next'
 
         <div class="hero-actions">
           <a 
-            href="https://cloud.wigiwee.com/s/QY968g6ZRH74ALm" 
+            href="https://drive.google.com/file/d/1FJ7ZWoAh9C0E9r7448JalYS1iRnyhXSf/view?usp=drive_link" 
             target="_blank"
             class="btn-primary"
           >
