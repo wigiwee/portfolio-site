@@ -1,61 +1,140 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
+
+const baseExperiences = [
+  {
+    title: "Tinkerer's Lab Manager",
+    org: "Tinkerer's Lab PREC",
+    logo: new URL('@/assets/tl.png', import.meta.url).href,
+    duration: "Academic year 2025 to 2026",
+    details: [
+      "Managed Tinkerers’ Lab operations serving 150+ active students/month, ensuring high uptime and efficient workflows",
+      "Maintained and optimized 3 3D printers, achieving ~45% operational uptime",
+      "Led a 10–15 member student technical team, improving project turnaround time by 40%",
+      "Conducted 25+ hands-on workshops on 3D printing, CAD & laser cutting, training 300+ students",
+      "Established safety protocols and SOPs, reducing equipment misuse incidents by 50%",
+      "Implemented inventory tracking, cutting material wastage by 20% and improving resource allocation",
+      "Organized 2 hackathons and interdisciplinary events with 100+ participants, boosting lab engagement and collaboration"
+    ]
+  },
+  {
+    title: "Web Developer Intern",
+    org: "Exaltasoft Solutions, Pune",
+    logo: new URL('@/assets/exaltasoft.png', import.meta.url).href,
+    duration: "Jan 2025 - Feb 2025",
+    details: [
+      "Delivered 3+ client-facing web applications for hotels and B2B clients, ensuring production-ready deployment",
+      "Increased platform traffic 3× (5k → 15k requests/month) through UI revamp and API optimization",
+      "Improved user engagement and session duration by ~30% via responsive, SEO-optimized interfaces",
+      "Built scalable REST APIs with Express.js, supporting efficient and reliable data handling",
+      "Reduced average response time by ~20% using optimized MongoDB queries and indexing",
+      "Enhanced overall system performance and usability, leading to improved client satisfaction and retention"
+    ]
+  },
+  {
+    title: "IT Manager",
+    org: "TCS ion",
+    logo: new URL('@/assets/tcsion.png', import.meta.url).href,
+    duration: "GATE 2024 & GATE 2025",
+    details: [
+      "Selected for a paid contract based technical operations role for GATE 2024 & 2025 examinations",
+      "Set up and managed 150+ systems, ensuring secure, stable, and isolated exam environments",
+      "Reduced system downtime/lock periods by ~30% through real-time issue diagnosis and resolution",
+      "Supported 1000+ candidate workflows, ensuring smooth onboarding and registration processes",
+      "Maintained high system reliability by adhering strictly to operational and security protocols",
+      "Collaborated with TCS iON and on-site teams, ensuring zero major disruptions during exam execution",
+    ]
+  }
+]
+
+// duplicate for infinite forward scroll
+const experiences = [...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,  ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
+
+]
+
+const current = ref(0)
+let interval
+
+const startAutoSlide = () => {
+  interval = setInterval(() => {
+    current.value++
+  }, 5000)
+}
+
+const stopAutoSlide = () => clearInterval(interval)
+
+onMounted(startAutoSlide)
+onUnmounted(stopAutoSlide)
 </script>
 
 <template>
   <section id="work" class="section-container">
     <h2 class="section-title">work.</h2>
-    
-    <div class="work-card">
-      <div class="timeline-line"></div>
-      <div class="timeline-dot"></div>
-      
-      <div class="work-content">
-        <img src="@/assets/tl.png" alt="Infosys" class="company-logo" />
-        
-        <h3 class="job-title">Tinkerer's Lab Manager</h3>
-        <p class="job-meta">Tinkerer's Lab PREC</p>
-        
-        <ul class="job-details">
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Managed end-to-end operations of the Tinkerers’ Lab, ensuring smooth daily functioning.</span>
-          </li>
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Maintained and supervised advanced fabrication tools including 3D printers and CO₂ laser cutters.</span>
-          </li>
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Led and mentored a student technical team supporting projects and lab activities.</span>
-          </li>
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Designed and enforced safety protocols, usage guidelines, and access policies.</span>
-          </li>
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Implemented inventory tracking systems to ensure accountability and efficient resource usage.</span>
-          </li>
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Conducted hands-on training sessions for students on machines and fabrication workflows.</span>
-          </li>
-          <li class="detail-item">
-            <ChevronRight class="detail-icon" />
-            <span>Coordinated workshops, hackathons, and interdisciplinary technical events.</span>
-          </li>
-        </ul>
+
+    <div 
+      class="slider"
+      @mouseenter="stopAutoSlide"
+      @mouseleave="startAutoSlide"
+    >
+      <div 
+        class="slider-track"
+        :style="{ transform: `translateX(-${current * 100}%)` }"
+      >
+        <div 
+          v-for="(exp, index) in experiences" 
+          :key="index" 
+          class="slide"
+        >
+          <div class="work-card">
+            <div class="card-top">
+              <img :src="exp.logo" class="company-logo" />
+
+              <h3 class="job-title">{{ exp.title }}</h3>
+
+              <div class="job-meta">
+                <span class="org">{{ exp.org }}</span>
+                <span class="duration">{{ exp.duration }}</span>
+              </div>
+            </div>
+
+            <ul class="job-details">
+              <li v-for="(d, i) in exp.details" :key="i" class="detail-item">
+                <ChevronRight class="detail-icon" />
+                <span>{{ d }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
-    <a 
-      href="https://makerbhavanfoundation.org/programs/tinkerers-lab/our-labs" 
-      target="_blank"
-      class="read-more-link"
-    >
-      Read More →
-    </a>
+    <div class="controls">
+      <button @click="current = (current - 1 + baseExperiences.length) % baseExperiences.length">
+        ← Prev
+      </button>
+      <button @click="current = (current + 1) % baseExperiences.length">
+        Next →
+      </button>
+    </div>
   </section>
 </template>
 
@@ -63,6 +142,21 @@ import { ChevronRight } from 'lucide-vue-next'
 .section-container {
   padding: 5rem 0;
   border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.slider {
+  overflow: hidden;
+  width: 100%;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.6s linear;
+}
+
+.slide {
+  min-width: 100%;
+  display: flex;
 }
 
 .work-card {
@@ -79,19 +173,18 @@ import { ChevronRight } from 'lucide-vue-next'
   box-shadow: 10px 10px 0px var(--border-color);
 }
 
-.timeline-line,
-.timeline-dot {
-  display: none;
+.card-top {
+  display: flex;
+  flex-direction: column;
 }
 
 .company-logo {
   height: 4rem;
-  width: auto;
   margin-bottom: 2rem;
+  align-self: flex-start;
   filter: grayscale(100%) contrast(1.2);
 }
 
-/* Invert logo in light mode if it's a white logo */
 :root.light .company-logo {
   filter: grayscale(100%) invert(1);
 }
@@ -107,84 +200,84 @@ import { ChevronRight } from 'lucide-vue-next'
 .job-title {
   font-size: 2rem;
   font-weight: 900;
-  margin-bottom: 0.5rem;
   font-family: var(--font-display);
   text-transform: uppercase;
-  letter-spacing: -1px;
-}
-
-.work-card:hover .job-title {
-  color: var(--text-color);
-  text-decoration: underline;
-  text-decoration-thickness: 3px;
 }
 
 .job-meta {
-  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 2rem;
   font-family: var(--font-mono);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 1rem;
+  font-size: 0.95rem;
   border-bottom: 2px solid var(--text-muted);
-  display: inline-block;
-  padding-bottom: 0.25rem;
+}
+
+.duration {
+  opacity: 0.7;
 }
 
 .job-details {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  color: var(--text-color);
 }
 
 .detail-item {
   display: flex;
-  align-items: flex-start;
   gap: 1rem;
 }
 
 .detail-item span {
-  font-size: 1.125rem;
-  line-height: 1.6;
   font-family: var(--font-mono);
 }
 
 .detail-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--text-color);
-  flex-shrink: 0;
-  margin-top: 0.25rem;
   background: var(--text-color);
   color: var(--bg-color);
   padding: 2px;
 }
 
-.read-more-link {
-  display: inline-block;
-  margin-top: 2rem;
-  font-size: 1.25rem;
-  font-weight: 900;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  color: var(--text-color);
-  text-decoration: none;
-  padding: 1rem 2rem;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: 6px 6px 0px var(--border-color);
-  transition: all 0.1s;
+.controls {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
 }
 
-.read-more-link:hover {
-  background: var(--text-color);
-  color: var(--bg-color);
-  transform: translate(2px, 2px);
+.controls button {
+  font-family: var(--font-mono);
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+  border: var(--border-width) solid var(--border-color);
   box-shadow: 4px 4px 0px var(--border-color);
 }
 
-.read-more-link:active {
-  transform: translate(6px, 6px);
-  box-shadow: 0px 0px 0px var(--border-color);
+.controls button:hover {
+  transform: translate(2px, 2px);
+}
+
+.read-more-link {
+  margin-top: 2rem;
+  display: inline-block;
+  padding: 1rem 2rem;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 6px 6px 0px var(--border-color);
+}
+.read-more-link {
+  margin-top: 2rem;
+  display: inline-block;
+  padding: 1rem 2rem;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 6px 6px 0px var(--border-color);
+
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+
+.read-more-link:hover {
+  transform: translate(2px, 2px);
 }
 </style>

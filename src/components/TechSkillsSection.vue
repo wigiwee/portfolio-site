@@ -2,14 +2,14 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const techSkills = [
-  { name: 'Linux System Administration', level: 'Expert', percent: 90 },
-  { name: 'Java', level: 'Advanced', percent: 95 },
-  { name: 'UNIX/Linux', level: 'Expert', percent: 90 },
-  { name: 'Networking Fundamentals', level: 'Expert', percent: 90 },
-  { name: 'Data Structures', level: 'Advanced', percent: 85 },
-  { name: 'Backend API Development', level: 'Advanced', percent: 80 },
-  { name: 'Docker & Containerization', level: 'Expert', percent: 92 },
-  { name: 'Automation & Scripting', level: 'Advanced', percent: 85 },
+  { name: 'Linux System Administration', level: 'Expert', percent: 97 },
+  { name: 'Java', level: 'Expert', percent: 95 },
+  { name: 'UNIX/Linux', level: 'Advanced', percent: 90 },
+  { name: 'Networking Fundamentals', level: 'Learning', percent: 80 },
+  { name: 'Data Structures', level: 'Advanced', percent: 90 },
+  { name: 'Backend API Development', level: 'Advanced', percent: 95 },
+  { name: 'Docker & Containerization', level: 'Advanced', percent: 90 },
+  { name: 'Automation & Scripting', level: 'Advanced', percent: 95 },
   { name: 'Debugging', level: 'Expert', percent: 95 },
 ]
 
