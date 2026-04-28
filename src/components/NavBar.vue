@@ -114,6 +114,12 @@ const closeMobileMenu = () => {
             :class="{ 'active': activeSection === 'tools' }"
           >Tools</a>
           <a 
+            href="#projects" 
+            @click.prevent="scrollToSection('#projects')" 
+            class="nav-link" 
+            :class="{ 'active': activeSection === 'projects' }"
+          >Projects</a>
+          <a 
             href="#work" 
             @click.prevent="scrollToSection('#work')" 
             class="nav-link" 
