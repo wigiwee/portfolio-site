@@ -1,5 +1,41 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { Download, ArrowUpRight, ArrowDown } from 'lucide-vue-next'
+
+const images = [
+  new URL('@/assets/dp0.webp', import.meta.url).href,
+  new URL('@/assets/dp1.gif', import.meta.url).href,
+  new URL('@/assets/dp2.png', import.meta.url).href
+]
+
+// duplicate for smooth infinite forward scroll
+const slides = [...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
+]
+
+const current = ref(0)
+let interval
+
+onMounted(() => {
+  interval = setInterval(() => {
+    current.value++
+  }, 4500)
+})
+
+onUnmounted(() => clearInterval(interval))
 </script>
 
 <template>
@@ -51,17 +87,23 @@ import { Download, ArrowUpRight, ArrowDown } from 'lucide-vue-next'
           </div>
         </div>
       </div>
-      <!-- Image - separate grid item to appear on right side on desktop -->
+
+      <!-- Image Slider -->
       <div class="hero-image-container">
         <div class="image-wrapper">
-          <div class="glow-effect"></div>
-          <img 
-            src="@/assets/dp0.webp"
-            alt="Kaustubh" 
-            class="profile-image"
-            loading="eager"
-            fetchpriority="high"
-          />
+
+          <div 
+            class="image-track"
+            :style="{ transform: `translateX(-${current * 100}%)` }"
+          >
+            <img 
+              v-for="(img, i) in slides"
+              :key="i"
+              :src="img"
+              class="profile-image"
+            />
+          </div>
+
         </div>
       </div>
     </div>
@@ -244,6 +286,9 @@ import { Download, ArrowUpRight, ArrowDown } from 'lucide-vue-next'
   position: relative;
   width: 18rem;
   height: 18rem;
+  overflow: hidden;
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: 15px 15px 0px var(--border-color);
 }
 
 @media (min-width: 768px) {
@@ -253,25 +298,23 @@ import { Download, ArrowUpRight, ArrowDown } from 'lucide-vue-next'
   }
 }
 
-.glow-effect {
-  display: none; /* Remove glow for brutalist */
+/* Continuous slider */
+.image-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s linear;
 }
 
 .profile-image {
-  position: relative;
-  width: 100%;
+  min-width: 100%;
   height: 100%;
   object-fit: cover;
-  border: var(--border-width) solid var(--border-color);
-  box-shadow: 15px 15px 0px var(--border-color);
-  /* No greyscale filter - show full color */
-  transition: all 0.2s;
 }
 
-.profile-image:hover {
+/* hover preserved exactly */
+.image-wrapper:hover {
   transform: translate(-5px, -5px);
   box-shadow: 20px 20px 0px var(--border-color);
-  /* No filter change needed */
 }
 
 .scroll-indicator {

@@ -1,15 +1,19 @@
 <script setup>
+
+
 const usesData = [
-  { type: 'Laptop', thing: 'dell G15 5520, i5 12500h, 3050 4GB' },
-  { type: 'Operating System', thing: 'Arch + KDE' },
-  { type: 'Mobile Phone', thing: 'OnePlus nord 2T' },
-  { type: 'Mobile OS', thing: 'Android' },
-  { type: 'Browser', thing: 'Firefox' },
+  { type: 'Laptop', thing: 'dell G15 5520, i5 12500H, 3050 4GB, Micron 512GB'},
+  { type: 'Server', thing: 'Ryzen 7 5700x, 32GB ddr4, 3060 12GB, SN770 2TB'},
+  { type: 'Operating System', thing: 'ArchLinux + KDE'},
+  { type: 'Terminal Emulator', thing: 'Alacritty + tmux'},
+  { type: 'Mobile Phone', thing: 'OnePlus nord 2T'},
+  { type: 'Mobile OS', thing: 'Android OxygenOS 14'},
+  { type: 'Browser', thing: 'Firefox'},
   { type: 'Text Editor', thing: 'VS Codium, neovim' },
   { type: 'Keyboard Layout', thing: 'US English' },
-  { type: 'Favorite Movie', thing: "Dead poet's society" },
-  { type: 'Favorite TV show', thing: 'Rick and Morty' },
-  { type: 'Favorite Game', thing: "Minecraft" },
+  { type: 'Favorite Movie', thing: "Se7ven, City of Angles, Kingdom of Heaven"},
+  { type: 'Favorite TV show', thing: 'Rick and Morty, Broklyn Nine-Nine, The Office, Foundation, 3 body problem' },
+  { type: 'Favorite Game', thing: "Minecraft, Assassins Creed , Ready or Not" },
 ]
 </script>
 
@@ -129,7 +133,7 @@ td {
   }
   
   th {
-    display: none; /* Hide headers on mobile */
+    display: none;
   }
   
   tr {
