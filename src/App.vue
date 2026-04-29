@@ -14,6 +14,7 @@ import Lenis from 'lenis'
 
 const lenis = ref(null)
 let observer = null
+let animationFrameId = null
 const showScrollTop = ref(false)
 
 // Provide Lenis at top level
@@ -39,11 +40,12 @@ onMounted(() => {
   })
 
   function raf(time) {
+    if (!lenis.value) return
     lenis.value.raf(time)
-    requestAnimationFrame(raf)
+    animationFrameId = requestAnimationFrame(raf)
   }
 
-  requestAnimationFrame(raf)
+  animationFrameId = requestAnimationFrame(raf)
 
   // Listen to scroll for scroll-to-top button visibility
   lenis.value.on('scroll', ({ scroll }) => {
@@ -81,8 +83,12 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+  }
   if (lenis.value) {
     lenis.value.destroy()
+    lenis.value = null
   }
   if (observer) {
     observer.disconnect()

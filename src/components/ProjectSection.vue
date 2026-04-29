@@ -1,4 +1,3 @@
-```vue
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { ChevronRight, Github } from 'lucide-vue-next'
@@ -61,44 +60,20 @@ const baseProjects = [
   }
 ]
 
-// duplicate for infinite forward scroll
-const projects = [...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-  ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects, ...baseProjects,
-]
-
 const current = ref(0)
 let interval
 
 const startAutoSlide = () => {
+  if (interval) return
   interval = setInterval(() => {
-    current.value++
+    current.value = (current.value + 1) % baseProjects.length
   }, 5000)
 }
 
-const stopAutoSlide = () => clearInterval(interval)
+const stopAutoSlide = () => {
+  clearInterval(interval)
+  interval = null
+}
 
 onMounted(startAutoSlide)
 onUnmounted(stopAutoSlide)
@@ -118,7 +93,7 @@ onUnmounted(stopAutoSlide)
         :style="{ transform: `translateX(-${current * 100}%)` }"
       >
         <div 
-          v-for="(proj, index) in projects" 
+          v-for="(proj, index) in baseProjects" 
           :key="index" 
           class="slide"
         >
@@ -134,7 +109,7 @@ onUnmounted(stopAutoSlide)
             </ul>
 
             <div class="project-actions">
-              <a :href="proj.link" target="_blank" class="github-btn">
+              <a :href="proj.link" target="_blank" rel="noopener noreferrer" class="github-btn">
                 <Github class="github-icon" />
                 GitHub
               </a>
@@ -307,4 +282,3 @@ onUnmounted(stopAutoSlide)
   box-shadow: 0px 0px 0px var(--border-color);
 }
 </style>
-```

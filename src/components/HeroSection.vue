@@ -8,30 +8,12 @@ const images = [
   new URL('@/assets/dp2.png', import.meta.url).href
 ]
 
-// duplicate for smooth infinite forward scroll
-const slides = [...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-  , ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images, ...images
-]
-
 const current = ref(0)
 let interval
 
 onMounted(() => {
   interval = setInterval(() => {
-    current.value++
+    current.value = (current.value + 1) % images.length
   }, 4500)
 })
 
@@ -65,6 +47,7 @@ onUnmounted(() => clearInterval(interval))
           <a 
             href="https://drive.google.com/file/d/1uk04oAVwSHo8dMgfbLccXaXM1XFDDnDe/view" 
             target="_blank"
+            rel="noopener noreferrer"
             class="btn-primary"
           >
             <Download class="icon-sm" />
@@ -75,10 +58,10 @@ onUnmounted(() => clearInterval(interval))
         <div class="hero-connect">
           <p class="label">Let's Connect</p>
           <div class="social-links">
-            <a href="https://github.com/wigiwee" target="_blank" class="social-link">
+            <a href="https://github.com/wigiwee" target="_blank" rel="noopener noreferrer" class="social-link">
               GitHub <ArrowUpRight class="icon-xs" />
             </a>
-            <a href="https://www.linkedin.com/in/kaustubh-kolhe-661143279/" target="_blank" class="social-link">
+            <a href="https://www.linkedin.com/in/kaustubh-kolhe-661143279/" target="_blank" rel="noopener noreferrer" class="social-link">
               LinkedIn <ArrowUpRight class="icon-xs" />
             </a>
             <a href="mailto:kaustubhk375@gmail.com" class="social-link">
@@ -97,10 +80,11 @@ onUnmounted(() => clearInterval(interval))
             :style="{ transform: `translateX(-${current * 100}%)` }"
           >
             <img 
-              v-for="(img, i) in slides"
+              v-for="(img, i) in images"
               :key="i"
               :src="img"
               class="profile-image"
+              alt="Kaustubh profile photo"
             />
           </div>
 

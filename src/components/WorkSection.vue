@@ -48,39 +48,20 @@ const baseExperiences = [
   }
 ]
 
-// duplicate for infinite forward scroll
-const experiences = [...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,  ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-  ...baseExperiences, ...baseExperiences,...baseExperiences, ...baseExperiences, ...baseExperiences, ...baseExperiences,
-
-]
-
 const current = ref(0)
 let interval
 
 const startAutoSlide = () => {
+  if (interval) return
   interval = setInterval(() => {
-    current.value++
+    current.value = (current.value + 1) % baseExperiences.length
   }, 5000)
 }
 
-const stopAutoSlide = () => clearInterval(interval)
+const stopAutoSlide = () => {
+  clearInterval(interval)
+  interval = null
+}
 
 onMounted(startAutoSlide)
 onUnmounted(stopAutoSlide)
@@ -100,13 +81,13 @@ onUnmounted(stopAutoSlide)
         :style="{ transform: `translateX(-${current * 100}%)` }"
       >
         <div 
-          v-for="(exp, index) in experiences" 
+          v-for="(exp, index) in baseExperiences" 
           :key="index" 
           class="slide"
         >
           <div class="work-card">
             <div class="card-top">
-              <img :src="exp.logo" class="company-logo" />
+              <img :src="exp.logo" :alt="`${exp.org} logo`" class="company-logo" />
 
               <h3 class="job-title">{{ exp.title }}</h3>
 

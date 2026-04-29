@@ -15,7 +15,7 @@ import { Github, Linkedin, Mail, Instagram } from 'lucide-vue-next'
     </div>
 
     <div class="connect-grid">
-      <a href="https://github.com/wigiwee" target="_blank" class="connect-card">
+      <a href="https://github.com/wigiwee" target="_blank" rel="noopener noreferrer" class="connect-card">
         <div class="card-content">
           <Github class="connect-icon" />
           <span class="connect-label">GitHub</span>
@@ -24,7 +24,7 @@ import { Github, Linkedin, Mail, Instagram } from 'lucide-vue-next'
         <div class="card-glow"></div>
       </a>
 
-      <a href="https://www.linkedin.com/in/kaustubh-kolhe-661143279/" target="_blank" class="connect-card">
+      <a href="https://www.linkedin.com/in/kaustubh-kolhe-661143279/" target="_blank" rel="noopener noreferrer" class="connect-card">
         <div class="card-content">
           <Linkedin class="connect-icon" />
           <span class="connect-label">LinkedIn</span>
@@ -42,7 +42,7 @@ import { Github, Linkedin, Mail, Instagram } from 'lucide-vue-next'
         <div class="card-glow"></div>
       </a>
 
-      <a href="https://instagram.com/kaustubh.o_o" target="_blank" class="connect-card">
+      <a href="https://instagram.com/kaustubh.o_o" target="_blank" rel="noopener noreferrer" class="connect-card">
         <div class="card-content">
           <Instagram class="connect-icon" />
           <span class="connect-label">Instagram</span>

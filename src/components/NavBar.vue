@@ -135,6 +135,7 @@ const closeMobileMenu = () => {
             href="https://uptime.wigiwee.com/status/selfhosted"  
             class="nav-link" 
             target="_blank"
+            rel="noopener noreferrer"
           >check uptime</a>
         </div>
 
@@ -165,8 +166,10 @@ const closeMobileMenu = () => {
       <div v-if="isMobileMenuOpen" class="mobile-menu">
         <a href="#about" @click.prevent="scrollToSection('#about')" class="mobile-nav-link" :class="{ 'active': activeSection === 'about' }">About</a>
         <a href="#tools" @click.prevent="scrollToSection('#tools')" class="mobile-nav-link" :class="{ 'active': activeSection === 'tools' }">Tools</a>
+        <a href="#projects" @click.prevent="scrollToSection('#projects')" class="mobile-nav-link" :class="{ 'active': activeSection === 'projects' }">Projects</a>
         <a href="#work" @click.prevent="scrollToSection('#work')" class="mobile-nav-link" :class="{ 'active': activeSection === 'work' }">Work</a>
         <a href="#connect" @click.prevent="scrollToSection('#connect')" class="mobile-nav-link" :class="{ 'active': activeSection === 'connect' }">Connect</a>
+        <a href="https://uptime.wigiwee.com/status/selfhosted" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">check uptime</a>
       </div>
     </Transition>
   </nav>
