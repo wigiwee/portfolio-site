@@ -1,8 +1,10 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch, inject } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch, inject } from 'vue'
 import { Moon, Sun, Menu, X } from 'lucide-vue-next'
 
 const lenis = inject('lenis', null)
+const UPTIME_STATUS_URL = 'https://uptime.wigiwee.com/status/selfhosted'
+const UPTIME_API_URL = '/api/uptime'
 
 // Theme state
 const isDark = ref(false)
@@ -12,6 +14,16 @@ const isMobileMenuOpen = ref(false)
 
 // Active section state
 const activeSection = ref('')
+const uptimeStatus = ref({
+  state: 'loading',
+  percent: null,
+  onlineServices: 0,
+  totalServices: 0,
+  lastChecked: null,
+})
+
+let uptimeRefreshInterval = null
+let uptimeAbortController = null
 
 // Initialize theme from localStorage
 onMounted(() => {
@@ -23,6 +35,8 @@ onMounted(() => {
   
   // Setup intersection observer for active link
   setupObserver()
+  fetchUptimeStatus()
+  uptimeRefreshInterval = setInterval(fetchUptimeStatus, 60_000)
 })
 
 let observer = null
@@ -50,6 +64,12 @@ const setupObserver = () => {
 onUnmounted(() => {
   if (observer) {
     observer.disconnect()
+  }
+  if (uptimeRefreshInterval) {
+    clearInterval(uptimeRefreshInterval)
+  }
+  if (uptimeAbortController) {
+    uptimeAbortController.abort()
   }
 })
 
@@ -88,6 +108,101 @@ const scrollToSection = (sectionId) => {
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
 }
+
+const formatUptimePercent = (percent) => {
+  if (!Number.isFinite(percent)) return null
+  return `${percent.toFixed(percent >= 99.95 ? 2 : 1)}%`
+}
+
+const normalizeUptimePayload = (payload) => {
+  const heartbeatList = payload?.heartbeatList ?? {}
+  const uptimeList = payload?.uptimeList ?? {}
+
+  const latestHeartbeats = Object.values(heartbeatList)
+    .filter(Array.isArray)
+    .map((entries) => entries.at(-1))
+    .filter(Boolean)
+
+  const totalServices = latestHeartbeats.length
+  const onlineServices = latestHeartbeats.filter((heartbeat) => heartbeat.status === 1).length
+  const uptimeValues = Object.entries(uptimeList)
+    .filter(([key]) => key.endsWith('_24'))
+    .map(([, value]) => Number(value))
+    .filter(Number.isFinite)
+
+  const averageUptime = uptimeValues.length
+    ? uptimeValues.reduce((sum, value) => sum + value, 0) / uptimeValues.length
+    : null
+
+  return {
+    state: totalServices > 0 && onlineServices === totalServices
+      ? 'online'
+      : onlineServices > 0
+        ? 'degraded'
+        : 'down',
+    percent: averageUptime === null ? null : averageUptime * 100,
+    onlineServices,
+    totalServices,
+    lastChecked: latestHeartbeats.at(-1)?.time ?? null,
+  }
+}
+
+const fetchUptimeStatus = async () => {
+  if (uptimeAbortController) {
+    uptimeAbortController.abort()
+  }
+
+  uptimeAbortController = new AbortController()
+
+  try {
+    const response = await fetch(UPTIME_API_URL, {
+      signal: uptimeAbortController.signal,
+      headers: { Accept: 'application/json' },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Uptime request failed with ${response.status}`)
+    }
+
+    uptimeStatus.value = normalizeUptimePayload(await response.json())
+  } catch (error) {
+    if (error.name === 'AbortError') return
+
+    uptimeStatus.value = {
+      state: 'unknown',
+      percent: null,
+      onlineServices: 0,
+      totalServices: 0,
+      lastChecked: null,
+    }
+  } finally {
+    uptimeAbortController = null
+  }
+}
+
+const uptimePercentLabel = computed(() => formatUptimePercent(uptimeStatus.value.percent))
+
+const uptimeLabel = computed(() => {
+  if (uptimeStatus.value.state === 'loading') return 'uptime ...'
+  if (uptimePercentLabel.value) return `${uptimePercentLabel.value} uptime`
+  return 'check uptime'
+})
+
+const uptimeTitle = computed(() => {
+  const { onlineServices, totalServices, state } = uptimeStatus.value
+
+  if (state === 'loading') return 'Checking self-hosted uptime'
+  if (state === 'unknown') return 'Live uptime unavailable'
+  return `${onlineServices}/${totalServices} services online${uptimeStatus.value.lastChecked ? `, last checked ${uptimeStatus.value.lastChecked}` : ''}`
+})
+
+const uptimeClass = computed(() => ({
+  'is-online': uptimeStatus.value.state === 'online',
+  'is-degraded': uptimeStatus.value.state === 'degraded',
+  'is-down': uptimeStatus.value.state === 'down',
+  'is-loading': uptimeStatus.value.state === 'loading',
+  'is-unknown': uptimeStatus.value.state === 'unknown',
+}))
 </script>
 
 <template>
@@ -126,17 +241,29 @@ const closeMobileMenu = () => {
             :class="{ 'active': activeSection === 'work' }"
           >Work</a>
           <a 
+            href="#activity" 
+            @click.prevent="scrollToSection('#activity')" 
+            class="nav-link" 
+            :class="{ 'active': activeSection === 'activity' }"
+          >Activity</a>
+          <a 
             href="#connect" 
             @click.prevent="scrollToSection('#connect')" 
             class="nav-link" 
             :class="{ 'active': activeSection === 'connect' }"
           >Connect</a>
           <a 
-            href="https://uptime.wigiwee.com/status/selfhosted"  
-            class="nav-link" 
+            :href="UPTIME_STATUS_URL"
+            class="nav-link uptime-link" 
+            :class="uptimeClass"
             target="_blank"
             rel="noopener noreferrer"
-          >check uptime</a>
+            :title="uptimeTitle"
+            aria-live="polite"
+          >
+            <span class="uptime-dot"></span>
+            <span>{{ uptimeLabel }}</span>
+          </a>
         </div>
 
         <!-- Theme Toggle -->
@@ -167,9 +294,21 @@ const closeMobileMenu = () => {
         <a href="#about" @click.prevent="scrollToSection('#about')" class="mobile-nav-link" :class="{ 'active': activeSection === 'about' }">About</a>
         <a href="#tools" @click.prevent="scrollToSection('#tools')" class="mobile-nav-link" :class="{ 'active': activeSection === 'tools' }">Tools</a>
         <a href="#projects" @click.prevent="scrollToSection('#projects')" class="mobile-nav-link" :class="{ 'active': activeSection === 'projects' }">Projects</a>
+        <a href="#activity" @click.prevent="scrollToSection('#activity')" class="mobile-nav-link" :class="{ 'active': activeSection === 'activity' }">Activity</a>
         <a href="#work" @click.prevent="scrollToSection('#work')" class="mobile-nav-link" :class="{ 'active': activeSection === 'work' }">Work</a>
         <a href="#connect" @click.prevent="scrollToSection('#connect')" class="mobile-nav-link" :class="{ 'active': activeSection === 'connect' }">Connect</a>
-        <a href="https://uptime.wigiwee.com/status/selfhosted" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">check uptime</a>
+        <a
+          :href="UPTIME_STATUS_URL"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mobile-nav-link uptime-link"
+          :class="uptimeClass"
+          :title="uptimeTitle"
+          aria-live="polite"
+        >
+          <span class="uptime-dot"></span>
+          <span>{{ uptimeLabel }}</span>
+        </a>
       </div>
     </Transition>
   </nav>
@@ -232,13 +371,13 @@ const closeMobileMenu = () => {
 .right-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .nav-links {
   display: flex;
-  gap: 1rem;
-  font-size: 1rem;
+  gap: 0.5rem;
+  font-size: 0.9rem;
   font-weight: 700;
   font-family: var(--font-mono);
   text-transform: uppercase;
@@ -248,7 +387,7 @@ const closeMobileMenu = () => {
   color: var(--text-color);
   position: relative;
   transition: all 0.1s;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.65rem;
   border: var(--border-width) solid transparent;
   text-decoration: none;
 }
@@ -263,6 +402,45 @@ const closeMobileMenu = () => {
   background: var(--text-color);
   color: var(--bg-color);
   border-color: var(--border-color);
+}
+
+.uptime-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.uptime-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  background: #666666;
+  border: 2px solid var(--border-color);
+  box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.uptime-link.is-online .uptime-dot {
+  background: #18c964;
+}
+
+.uptime-link.is-degraded .uptime-dot {
+  background: #f5a524;
+}
+
+.uptime-link.is-down .uptime-dot {
+  background: #f31260;
+}
+
+.uptime-link.is-loading .uptime-dot,
+.uptime-link.is-unknown .uptime-dot {
+  background: var(--bg-color);
+}
+
+.uptime-link:hover .uptime-dot,
+.uptime-link.active .uptime-dot {
+  border-color: var(--bg-color);
+  box-shadow: 2px 2px 0px var(--bg-color);
 }
 
 /* Theme Toggle */
@@ -368,6 +546,10 @@ const closeMobileMenu = () => {
 .mobile-nav-link.active {
   background: var(--text-color);
   color: var(--bg-color);
+}
+
+.mobile-nav-link.uptime-link {
+  justify-content: center;
 }
 
 /* Responsive */

@@ -10,6 +10,7 @@ import WorkSection from './components/WorkSection.vue'
 import UsesSection from './components/UsesSection.vue'
 import ConnectSection from './components/ConnectSection.vue'
 import ProjectSection from './components/ProjectSection.vue'
+import RecentActivitiesSection from './components/RecentActivitiesSection.vue'
 import Lenis from 'lenis'
 
 const lenis = ref(null)
@@ -107,6 +108,7 @@ onUnmounted(() => {
       <SkillsSection />
       <ProjectSection/>
       <WorkSection />
+      <RecentActivitiesSection />
       <UsesSection />
       <ConnectSection />
     </main>
