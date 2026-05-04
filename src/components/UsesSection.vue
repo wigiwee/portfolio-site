@@ -2,7 +2,7 @@
 
 
 const usesData = [
-  { type: 'Laptop', thing: 'dell G15 5520, i5 12500H, 3050 4GB, Micron 512GB'},
+  { type: 'Laptop', thing: 'dell G15 5520, i5 12500H, Nvidia 3050 4GB, 24GB DDR5, 512GB'},
   { type: 'Server', thing: 'Ryzen 7 5700x, 32GB ddr4, 3060 12GB, SN770 2TB'},
   { type: 'Operating System', thing: 'ArchLinux + KDE'},
   { type: 'Terminal Emulator', thing: 'Alacritty + tmux'},

@@ -99,6 +99,14 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    proxy: {
+      '/api': {
+        target: process.env.BACKEND_URL ?? 'http://backend:5000',
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
