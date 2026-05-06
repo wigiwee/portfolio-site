@@ -100,6 +100,7 @@ export default defineConfig({
     },
   },
   preview: {
+    allowedHosts: ['wigiwee.com', 'www.wigiwee.com'],
     proxy: {
       '/api': {
         target: process.env.BACKEND_URL ?? 'http://backend:5000',
