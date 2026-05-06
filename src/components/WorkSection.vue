@@ -138,15 +138,17 @@ onUnmounted(stopAutoSlide)
 .slide {
   min-width: 100%;
   display: flex;
+  padding: 0 14px 14px 0;
 }
 
 .work-card {
   position: relative;
+  width: 100%;
   padding: 2rem;
   border: var(--border-width) solid var(--border-color);
   background: var(--bg-color);
   box-shadow: 8px 8px 0px var(--border-color);
-  transition: all 0.1s;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .work-card:hover {

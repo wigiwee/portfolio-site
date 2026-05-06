@@ -138,23 +138,27 @@ onUnmounted(stopAutoSlide)
 
 .slider {
   overflow: hidden;
+  width: 100%;
 }
 
 .slider-track {
   display: flex;
-  transition: transform 0.6s linear; /* smooth continuous */
+  transition: transform 0.6s linear;
 }
 
 .slide {
   min-width: 100%;
   display: flex;
+  padding: 0 14px 14px 0;
 }
 
 .project-card {
+  width: 100%;
   padding: 2rem;
   border: var(--border-width) solid var(--border-color);
   background: var(--bg-color);
   box-shadow: 8px 8px 0px var(--border-color);
+  transition: transform 0.1s, box-shadow 0.1s;
 
   display: flex;
   flex-direction: column;
