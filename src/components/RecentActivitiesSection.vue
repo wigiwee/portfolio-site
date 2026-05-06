@@ -1,12 +1,13 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { ArrowUpRight, Code2, GitBranch, Github, Star } from 'lucide-vue-next'
+import { apiUrl } from '@/config/api'
 
 const GITHUB_PROFILE_URL = 'https://github.com/wigiwee'
 const LEETCODE_PROFILE_URL = 'https://leetcode.com/u/wigiwee/'
-const GITHUB_REPOS_ENDPOINT = '/api/github/repos'
-const GITHUB_EVENTS_ENDPOINT = '/api/github/events'
-const LEETCODE_ENDPOINT = '/api/leetcode'
+const GITHUB_REPOS_ENDPOINT = apiUrl('/api/github/repos')
+const GITHUB_EVENTS_ENDPOINT = apiUrl('/api/github/events')
+const LEETCODE_ENDPOINT = apiUrl('/api/leetcode')
 
 const repos = ref([])
 const events = ref([])

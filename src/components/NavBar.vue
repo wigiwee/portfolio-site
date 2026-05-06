@@ -1,10 +1,11 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted, watch, inject } from 'vue'
 import { Moon, Sun, Menu, X } from 'lucide-vue-next'
+import { apiUrl } from '@/config/api'
 
 const lenis = inject('lenis', null)
 const UPTIME_STATUS_URL = 'https://uptime.wigiwee.com/status/selfhosted'
-const UPTIME_API_URL = '/api/uptime'
+const UPTIME_API_URL = apiUrl('/api/uptime')
 
 // Theme state
 const isDark = ref(false)

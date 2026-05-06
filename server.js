@@ -4,6 +4,17 @@ import path from 'node:path'
 
 const PORT = Number(process.env.PORT ?? 3000)
 const DIST_DIR = path.join(process.cwd(), 'dist')
+const DEFAULT_ALLOWED_ORIGINS = [
+  'https://wigiwee.com',
+  'https://www.wigiwee.com',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+]
+const ALLOWED_ORIGINS = new Set(
+  (process.env.CORS_ORIGINS?.split(',') ?? DEFAULT_ALLOWED_ORIGINS)
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+)
 const UPTIME_ENDPOINT = 'https://uptime.wigiwee.com/api/status-page/heartbeat/selfhosted'
 const GITHUB_REPOS_ENDPOINT = 'https://api.github.com/users/wigiwee/repos?sort=updated&direction=desc&per_page=6'
 const GITHUB_EVENTS_ENDPOINT = 'https://api.github.com/users/wigiwee/events/public?per_page=8'
@@ -50,6 +61,19 @@ const contentTypes = {
 const send = (response, statusCode, headers = {}, body = '') => {
   response.writeHead(statusCode, headers)
   response.end(body)
+}
+
+const applyCorsHeaders = (request, response) => {
+  const origin = request.headers.origin
+
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) {
+    return
+  }
+
+  response.setHeader('Access-Control-Allow-Origin', origin)
+  response.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS')
+  response.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type')
+  response.setHeader('Vary', 'Origin')
 }
 
 const handleJsonProxy = async (request, response, endpoint, errorMessage, maxAge = 60) => {
@@ -173,6 +197,16 @@ const handleStatic = async (request, response, url) => {
 
 const server = createServer(async (request, response) => {
   const url = new URL(request.url ?? '/', `http://${request.headers.host ?? 'localhost'}`)
+  const isApiRequest = url.pathname.startsWith('/api/')
+
+  if (isApiRequest) {
+    applyCorsHeaders(request, response)
+
+    if (request.method === 'OPTIONS') {
+      send(response, 204)
+      return
+    }
+  }
 
   if (url.pathname === '/api/uptime') {
     await handleJsonProxy(request, response, UPTIME_ENDPOINT, 'Unable to fetch uptime status', 30)
